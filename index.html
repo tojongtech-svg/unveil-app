@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Unveil — Connect Beyond the Surface</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080e;--s:#0e0e17;--c:#13131e;--c2:#181826;--b:#22223a;--b2:#2e2e4a;--gold:#c8a96e;--v:#7c6cf8;--vd:#4a3fd4;--coral:#e87c6a;--grn:#5ecb8a;--txt:#e8e8f2;--t2:#a0a0c0;--mu:#606088;--dim:#303050}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif}
+.orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);animation:drift 20s ease-in-out infinite}
+.o1{width:600px;height:600px;background:var(--v);top:-20%;left:-15%;opacity:.09}
+.o2{width:500px;height:500px;background:var(--coral);bottom:-20%;right:-10%;opacity:.09;animation-delay:-8s}
+.o3{width:350px;height:350px;background:var(--gold);top:35%;left:45%;opacity:.055;animation-delay:-15s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.08)}66%{transform:translate(-25px,20px) scale(.94)}}
+#app{position:relative;z-index:10;height:100vh;max-width:430px;margin:0 auto}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;transform:translateX(100%);transition:opacity .35s ease,transform .35s cubic-bezier(.25,.46,.45,.94);pointer-events:none;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.scr::-webkit-scrollbar{display:none}
+.scr.on{opacity:1;transform:translateX(0);pointer-events:all}
+.scr.out{opacity:0;transform:translateX(-50px);transition:opacity .25s,transform .25s}
+.body{flex:1;padding:0 26px 100px;display:flex;flex-direction:column}
+.pt{padding-top:52px}
+.topbar{display:flex;align-items:center;padding:52px 26px 0;flex-shrink:0}
+.bk{background:none;border:none;cursor:pointer;color:var(--mu);font-family:'DM Sans',sans-serif;font-size:.88rem;display:flex;align-items:center;gap:6px;padding:8px 0;transition:color .2s}
+.bk:hover{color:var(--t2)}
+.pw{padding:16px 26px 0;flex-shrink:0}
+.pt2{height:2px;background:var(--dim);border-radius:10px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--v),var(--gold));border-radius:10px;transition:width .5s}
+.pl{font-size:.67rem;color:var(--mu);margin-top:6px;text-align:right;letter-spacing:.04em}
+.ico{font-size:3rem;margin:28px 0 18px;display:block;animation:ib .5s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes ib{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+h1{font-family:'Playfair Display',serif;font-size:2rem;line-height:1.15;margin-bottom:10px;font-weight:700}
+h1 em{color:var(--gold);font-style:italic}
+.sub{font-size:.88rem;color:var(--mu);line-height:1.65;margin-bottom:26px}
+.fld{margin-bottom:14px}
+.flbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);font-weight:600;margin-bottom:6px;display:block}
+.inp{width:100%;background:var(--c);border:1.5px solid var(--b);border-radius:14px;padding:14px 16px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.inp:focus{border-color:var(--v);box-shadow:0 0 0 3px rgba(124,108,248,.12)}
+.inp::placeholder{color:var(--dim)}
+select.inp{cursor:pointer}
+.ir{display:flex;gap:12px}
+.ir .fld{flex:1}
+.btn{width:100%;padding:15px;border:none;border-radius:16px;font-family:'DM Sans',sans-serif;font-size:.93rem;font-weight:600;cursor:pointer;transition:all .2s;-webkit-appearance:none}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
+.bv{background:linear-gradient(135deg,var(--v),var(--vd));color:#fff}
+.bv:hover{box-shadow:0 8px 24px rgba(124,108,248,.35)}
+.bg2{background:linear-gradient(135deg,var(--gold),#a87840);color:#1a1206}
+.bgr{background:linear-gradient(135deg,var(--grn),#3aaa68);color:#0a1a10}
+.bgh{background:transparent;border:1.5px solid var(--b2);color:var(--mu)}
+.bgh:hover{border-color:var(--mu);color:var(--t2)}
+.btn+.btn{margin-top:10px}
+.soc{width:100%;padding:13px 16px;background:var(--c);border:1.5px solid var(--b2);border-radius:14px;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:10px}
+.soc:hover{background:var(--c2);border-color:var(--mu)}
+.ord{display:flex;align-items:center;gap:12px;color:var(--dim);font-size:.78rem;margin:16px 0}
+.ord::before,.ord::after{content:'';flex:1;height:1px;background:var(--b)}
+.avgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.avopt{aspect-ratio:1;background:var(--c);border:1.5px solid var(--b);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;cursor:pointer;transition:all .2s;user-select:none}
+.avopt:hover{border-color:var(--b2);transform:scale(1.05)}
+.avopt.sel{border-color:var(--gold);background:rgba(200,169,110,.1);transform:scale(1.1);box-shadow:0 0 16px rgba(200,169,110,.22)}
+.tgrid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tag{padding:9px 14px;background:var(--c);border:1.5px solid var(--b);border-radius:24px;font-size:.81rem;cursor:pointer;transition:all .2s;user-select:none;color:var(--t2)}
+.tag:hover{border-color:var(--b2)}
+.tag.sel{background:rgba(124,108,248,.14);border-color:var(--v);color:var(--v)}
+.th{font-size:.72rem;color:var(--mu);margin-bottom:12px}
+.th strong{color:var(--v)}
+.ocard{background:var(--c);border:1.5px solid var(--b);border-radius:16px;padding:14px 15px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:all .2s;margin-bottom:10px;user-select:none}
+.ocard:hover{border-color:var(--b2);background:var(--c2)}
+.ocard.sel{border-color:var(--gold);background:rgba(200,169,110,.07)}
+.oi{font-size:1.4rem;width:36px;text-align:center;flex-shrink:0}
+.ob{flex:1}
+.ot{font-size:.88rem;font-weight:600;margin-bottom:2px}
+.os{font-size:.74rem;color:var(--mu)}
+.ock{width:22px;height:22px;border-radius:50%;border:2px solid var(--dim);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:transparent;transition:all .2s}
+.ocard.sel .ock{background:var(--gold);border-color:var(--gold);color:#1a0e00}
+.pcard{background:var(--c);border:1.5px solid var(--b);border-radius:16px;padding:16px;margin-bottom:13px}
+.pq{font-family:'Playfair Display',serif;font-size:.87rem;color:var(--gold);font-style:italic;margin-bottom:9px;line-height:1.4}
+.pta{width:100%;background:transparent;border:none;outline:none;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.88rem;resize:none;line-height:1.55;min-height:68px}
+.pta::placeholder{color:var(--dim)}
+.cc{font-size:.65rem;color:var(--dim);text-align:right;margin-top:5px}
+.ibox{background:rgba(124,108,248,.07);border:1px solid rgba(124,108,248,.18);border-radius:12px;padding:12px 14px;font-size:.78rem;color:var(--t2);line-height:1.55;display:flex;gap:10px;margin-bottom:15px}
+.ibg{background:rgba(200,169,110,.07);border-color:rgba(200,169,110,.2)}
+.lbox{background:linear-gradient(135deg,rgba(200,169,110,.07),rgba(124,108,248,.05));border:1.5px solid rgba(200,169,110,.2);border-radius:16px;padding:15px;display:flex;gap:12px;margin-bottom:13px}
+.li{font-size:1.4rem;flex-shrink:0}
+.lb h4{font-size:.86rem;font-weight:600;color:var(--gold);margin-bottom:3px}
+.lb p{font-size:.77rem;color:var(--mu);line-height:1.5}
+.pvcard{background:var(--c);border:1.5px solid var(--b);border-radius:20px;padding:19px;margin-bottom:15px;position:relative;overflow:hidden}
+.pvcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--v),var(--gold))}
+.pvav{width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,#1e1e38,#12223a);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin-bottom:11px;border:1.5px solid var(--b)}
+.pvnm{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:2px}
+.pvlv{font-size:.7rem;color:var(--mu);margin-bottom:9px}
+.pvtgs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px}
+.pvtg{background:rgba(255,255,255,.04);border:1px solid var(--b);color:var(--mu);padding:3px 9px;border-radius:20px;font-size:.7rem}
+.pvlk{border-top:1px solid var(--b);padding-top:11px;font-size:.72rem;color:var(--mu);display:flex;align-items:center;gap:6px}
+.sring{width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,var(--v),var(--gold));display:flex;align-items:center;justify-content:center;font-size:2.4rem;margin:24px auto 22px;box-shadow:0 0 50px rgba(124,108,248,.35);animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 50px rgba(124,108,248,.35),0 0 90px rgba(200,169,110,.1)}50%{box-shadow:0 0 70px rgba(124,108,248,.55),0 0 120px rgba(200,169,110,.2)}}
+.sstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 24px}
+.sst{background:var(--c);border:1px solid var(--b);border-radius:13px;padding:13px;text-align:center}
+.sn{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--gold);display:block}
+.sl{font-size:.64rem;color:var(--mu);margin-top:2px}
+.chdr{background:var(--s);border-bottom:1px solid var(--b);padding:52px 17px 13px;display:flex;align-items:center;gap:11px;flex-shrink:0}
+.cbk{background:none;border:none;color:var(--mu);font-size:1.2rem;cursor:pointer;padding:4px;transition:color .2s}
+.cbk:hover{color:var(--t2)}
+.cav{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#1e1e38,#12223a);display:flex;align-items:center;justify-content:center;font-size:1.2rem;border:1px solid var(--b);flex-shrink:0}
+.ci{flex:1}
+.cn{font-weight:600;font-size:.93rem}
+.cs{font-size:.68rem;color:var(--grn);display:flex;align-items:center;gap:4px}
+.cs::before{content:'';width:5px;height:5px;background:var(--grn);border-radius:50%}
+.lbdg{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:20px}
+.lb2{background:rgba(124,108,248,.15);color:var(--v);border:1px solid rgba(124,108,248,.3)}
+.lbar{background:var(--bg);border-bottom:1px solid var(--b);padding:10px 17px;flex-shrink:0}
+.lt{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ll{font-size:.67rem;color:var(--mu)}
+.ln{font-size:.64rem;color:var(--v)}
+.ltr{height:3px;background:var(--dim);border-radius:10px;overflow:hidden}
+.lf{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--v),var(--coral));transition:width .8s ease}
+.lsteps{display:flex;justify-content:space-between;margin-top:6px}
+.lstep{font-size:.57rem;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:2px}
+.lstep.done{color:var(--v)}
+.lstep.cur{color:var(--gold);font-weight:600}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--dim)}
+.lstep.done .ldot{background:var(--v)}
+.lstep.cur .ldot{background:var(--gold);box-shadow:0 0 5px var(--gold)}
+.frow{display:flex;gap:6px;padding:8px 17px;border-bottom:1px solid var(--b);overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.frow::-webkit-scrollbar{display:none}
+.fpill{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:.67rem;white-space:nowrap;border:1px solid;cursor:pointer}
+.fon{background:rgba(94,203,138,.08);border-color:rgba(94,203,138,.25);color:var(--grn)}
+.fpt{background:rgba(200,169,110,.08);border-color:rgba(200,169,110,.25);color:var(--gold)}
+.foff{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.06);color:rgba(255,255,255,.22)}
+.dpb{margin:11px 17px;background:linear-gradient(135deg,rgba(200,169,110,.07),rgba(124,108,248,.06));border:1px solid rgba(200,169,110,.2);border-radius:13px;padding:12px 15px;cursor:pointer;transition:border-color .2s;flex-shrink:0}
+.dpb:hover{border-color:rgba(200,169,110,.36)}
+.dpl{font-size:.61rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:600;margin-bottom:3px}
+.dpq{font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;color:var(--t2)}
+.msgs{flex:1;overflow-y:auto;padding:15px 17px;display:flex;flex-direction:column;gap:13px;scrollbar-width:thin;scrollbar-color:var(--b) transparent}
+.mg{display:flex;flex-direction:column;gap:3px}
+.msg{max-width:74%;padding:11px 13px;border-radius:17px;font-size:.87rem;line-height:1.5}
+.msg.them{background:var(--c);border:1px solid var(--b);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.me{background:linear-gradient(135deg,var(--v),var(--vd));border-bottom-right-radius:4px;align-self:flex-end;color:#fff}
+.mt{font-size:.59rem;color:var(--mu)}
+.mt.r{text-align:right}
+.smsg{text-align:center;padding:6px 13px;background:rgba(124,108,248,.07);border:1px solid rgba(124,108,248,.15);border-radius:20px;font-size:.69rem;color:var(--v);margin:2px auto;max-width:310px}
+.umsg{background:linear-gradient(135deg,rgba(200,169,110,.1),rgba(124,108,248,.08));border:1px solid rgba(200,169,110,.28);border-radius:13px;padding:11px 14px;text-align:center}
+.umsg h4{font-family:'Playfair Display',serif;color:var(--gold);font-size:.86rem;margin-bottom:2px}
+.umsg p{font-size:.69rem;color:var(--mu)}
+.ciw{padding:11px 17px 30px;border-top:1px solid var(--b);background:var(--s);flex-shrink:0}
+.exb{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+.eb{background:var(--c);border:1px solid var(--b);color:var(--mu);padding:5px 10px;border-radius:9px;font-size:.69rem;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.eb:hover{border-color:var(--v);color:var(--v)}
+.eb.lk{opacity:.28;cursor:not-allowed}
+.ir2{display:flex;gap:8px;align-items:flex-end}
+.cta{flex:1;background:var(--c);border:1.5px solid var(--b);border-radius:13px;padding:12px 13px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.88rem;resize:none;outline:none;min-height:44px;max-height:120px;transition:border-color .2s}
+.cta:focus{border-color:var(--v)}
+.cta::placeholder{color:var(--mu)}
+.snd{width:44px;height:44px;flex-shrink:0;background:linear-gradient(135deg,var(--v),var(--vd));border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .2s;color:#fff}
+.snd:hover{transform:scale(1.06)}
+.snd:active{transform:scale(.97)}
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.mov.open{display:flex}
+.modal{background:var(--c);border:1.5px solid var(--b2);border-radius:28px 28px 0 0;padding:26px 24px 42px;width:100%;max-width:430px;text-align:center;animation:sup .35s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes sup{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.mh{width:36px;height:3px;background:var(--dim);border-radius:10px;margin:0 auto 20px}
+.mic{font-size:2.6rem;margin-bottom:13px}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:6px}
+.modal p{font-size:.8rem;color:var(--mu);line-height:1.6;margin-bottom:20px}
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--c2);border:1px solid var(--v);color:var(--txt);padding:10px 20px;border-radius:26px;font-size:.8rem;z-index:300;white-space:nowrap;box-shadow:0 8px 28px rgba(0,0,0,.5);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+#s-splash{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg)}
+.slogo{font-family:'Playfair Display',serif;font-size:4.5rem;font-style:italic;color:var(--gold);animation:fu 1.2s ease both}
+.stag{font-size:.9rem;color:var(--mu);margin-top:10px;animation:fu 1.2s .3s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.sbtns{margin-top:58px;width:100%;padding:0 30px;animation:fu .8s .7s ease both}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<div id="app">
+
+<div class="scr on" id="s-splash">
+  <div class="slogo">unveil</div>
+  <div class="stag">Connect beyond the surface.</div>
+  <div class="sbtns">
+    <button class="btn bv" onclick="go('s-signup')">Get Started →</button>
+    <button class="btn bgh" onclick="go('s-login')">I have an account</button>
+  </div>
+</div>
+
+<div class="scr" id="s-signup">
+  <div class="topbar"><button class="bk" onclick="go('s-splash')">← Back</button></div>
+  <div class="pw"><div class="pt2"><div class="pf" style="width:11%"></div></div><div class="pl">Step 1 of 9</div></div>
+  <div class="body pt">
+    <span class="ico">✉️</span>
+    <h1>Create your<br><em>account</em></h1>
+    <p class="sub">Your real name stays private until you choose to share it.</p>
+    <button class="soc" onclick="go('s-alias')">🍎 Continue with Apple</button>
+    <button class="soc" onclick="go('s-alias')">🔵 Continue with Google</button>
+    <div class="ord">or use email</div>
+    <div class="fld"><label class="flbl">Email</label><input class="inp" type="email" placeholder="your@email.com" id="ie"></div>
+    <div class="fld"><label class="flbl">Password</label><input class="inp" type="password" placeholder="Create a strong password" id="ip"></div>
+    <div class="ibox" style="margin-top:4px"><span>🔒</span><span>Your email is never shown to matches — used only for account security.</span></div>
+    <button class="btn bv" style="margin-top:auto" onclick="doSignup()">Continue →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-alias">
+  <div class="topbar"><button class="bk" onclick="go('s-signup')">← Back</button></div>
+  <div class="pw"><div class="pt2"><div class="pf" style="width:22%"></div></div><div class="pl">Step 2 of 9</div></div>
+  <div class="body pt">
+    <span class="ico">🎭</span>
+    <h1>Who are you<br>to <em>strangers?</em></h1>
+    <p class="sub">Your alias is how people know you before they know you. Make it feel like you.</p>
+    <div class="fld"><label class="flbl">Your Alias</label><input class="inp" type="text" placeholder="e.g. Nova_88, Arc_theory..." id="ial" oninput="liveAlias(this.value)" maxlength="20"></div>
+    <div class="ir">
+      <div class="fld"><label class="flbl">Age</label><input class="inp" type="number" placeholder="25" min="18" max="65"></div>
+      <div class="fld"><label class="flbl">Gender</label><select class="inp"><option value="" disabled selected>Select</option><option>Man</option><option>Woman</option><option>Non-binary</option><option>Prefer not to say</option></select></div>
+    </div>
+    <div class="fld"><label class="flbl">Interested in</label><select class="inp"><option value="" disabled selected>Select</option><option>Women</option><option>Men</option><option>Everyone</option></select></div>
+    <button class="btn bv" style="margin-top:auto" onclick="go('s-avatar')">Looks good →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-avatar">
+  <div class="topbar"><button class="bk" onclick="go('s-alias')">← Back</button></div>
+  <div class="pw"><div class="pt2"><div class="pf" style="width:33%"></div></div><div class="pl">Step 3 of 9</div></div>
+  <div class="body pt">
+    <span class="ico">✨</span>
+    <h1>Pick your<br><em>spirit emoji.</em></h1>
+    <p class="sub">This is your avatar until Level 3. No photos yet — just pure vibe.</p>
+    <div class="avgrid" id="avgrid"></div>
+    <div id="avhint" style="font-size:.77rem;color:var(--mu);margin-bottom:18px">Tap one to choose your avatar</div>
+    <button class="btn bv" id="avbtn" style="margin-top:auto" disabled onclick="go('s-vibes')">This is me →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-vibes">
+  <div class="topbar"><button class="bk" onclick="go('s-avatar')">← Back</button></div>
+  <div class="pw"><div class="pt2"><div class="pf" style="width:44%"></div></div><div class="pl">Step 4 of 9</div></div>
+  <div class="body pt">
+    <h1 style="margin-top:14px">What's your<br><em>vibe?</em></h1>
+    <p class="sub">Pick up to 8 tags. This is your personality before your photo.</p>
+    <div class="th">Selected: <strong id="tnum">0</strong>/8</div>
+    <div class="tgrid" id="tgrid"></div>
+    <button class="btn bv" id="tbtn" style="margin-top:auto" disabled onclick="go('s-looking')">These are my vibes →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-looking">
+  <div class="topbar"><button class="bk" onclick="go('s-vibes')">← Back</button></div>
+  <div class="pw"><div class="pt2"><div class="pf" style="width:55%"></div></div><div class="pl">Step 5 of 9</div></div>
+  <div class="body pt">
+    <span class="ico">🧭</span>
+    <h1>What are you<br><em>looking for?</em></h1>
+    <p class="sub">No judgment. Pick all that feel true right now.</p>
+    <div id="lopts">
+      <div class="ocard" onclick="tog(this)"><div class="oi">💬</div><div class="ob"><div class="ot">Deep conversations</div><div class="os">Someone to actually talk to</div></div><div class="ock">✓</div></div>
+      <div class="ocard" onclick="tog(this)"><div class="oi">🤝</div><div class="ob"><div class="ot">Genuine friendship</div><div class="os">No pressure, just real connection</div></div><div class="ock">✓</div></div>
+      <div class="ocard" onclick="tog(this)"><div class="oi">💞</div><div class="ob"><div class="ot">A relationship</div><div class="os">Something that actually goes somewhere</div></div><div class="ock">✓</div></div>
+      <div class="ocard" onclick="tog(this)"><div class="oi">🧭</div><div class="ob"><div class="ot">Just exploring</div><div class="os">No pressure, see what happens</div></div><div class="ock">✓</div></div>
+    </div>
+    <button class="btn bv" id="lbtn" style="margin-top:auto" disabled onclick="go('s-prompts')">This is me →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-prompts">
+  <div class="topbar"><button class="bk" onclick="go('s-looking')">← Back</button></div>
+  <div class="pw"><div class="pt2"><div class="pf" style="width:66%"></div></div><div class="pl">Step 6 of 9</div></div>
+  <div class="body pt">
+    <h1 style="margin-top:14px">Let them<br><em>know you.</em></h1>
+    <p class="sub">Answer 2 prompts. Matches read your words before they see anything else.</p>
+    <div class="pcard"><div class="pq">"What time of day do you feel most like yourself?"</div><textarea class="pta" placeholder="Be honest, not impressive..." maxlength="150" oninput="cc(this,'c1')"></textarea><div class="cc"><span id="c1">0</span>/150</div></div>
+    <div class="pcard"><div class="pq">"What's something you believe that most people don't?"</div><textarea class="pta" placeholder="This is where the real stuff lives..." maxlength="150" oninput="cc(this,'c2')"></textarea><div class="cc"><span id="c2">0</span>/150</div></div>
+    <div class="ibox"><span>✦</span><span>Both answer daily prompts separately — the reveal happens only after you both respond.</span></div>
+    <button class="btn bv" onclick="go('s-photo')">Almost there →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-photo">
+  <div class="topbar"><button class="bk" onclick="go('s-prompts')">← Back</button></div>
+  <div class="pw"><div class="pt2"><div class="pf" style="width:77%"></div></div><div class="pl">Step 7 of 9</div></div>
+  <div class="body pt">
+    <span class="ico">🔐</span>
+    <h1>About<br><em>your photo.</em></h1>
+    <p class="sub">Read this once — it's what makes Unveil different from everything else.</p>
+    <div class="lbox"><div class="li">🖼️</div><div class="lb"><h4>Photos locked until Level 3</h4><p>You and a match must both choose to share. No surprise reveals. No one-sided access. Both in — or neither sees.</p></div></div>
+    <div class="lbox"><div class="li">📷</div><div class="lb"><h4>Upload now (optional)</h4><p>Your photo goes into a vault. Nobody sees it until you unlock Level 3 together. You can skip and add it later.</p></div></div>
+    <button class="btn bg2" onclick="go('s-preview')">Upload Photo (optional)</button>
+    <button class="btn bgh" onclick="go('s-preview')">Skip for now →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-preview">
+  <div class="topbar"><button class="bk" onclick="go('s-photo')">← Back</button></div>
+  <div class="pw"><div class="pt2"><div class="pf" style="width:88%"></div></div><div class="pl">Step 8 of 9</div></div>
+  <div class="body pt">
+    <h1 style="margin-top:14px">Here's how<br><em>you appear.</em></h1>
+    <p class="sub">This is what someone sees when they match with you. Words first. Always.</p>
+    <div class="pvcard">
+      <div class="pvav" id="pvav">🦋</div>
+      <div class="pvnm" id="pvnm">Your_alias</div>
+      <div class="pvlv">Level 1 · Just joined</div>
+      <div class="pvtgs" id="pvtgs"><span class="pvtg">your tags show here</span></div>
+      <div class="pvlk">🔐 Photo locked until Level 3 · Contact locked until Level 6</div>
+    </div>
+    <div class="ibox"><span>💡</span><span>You can edit your profile at any time from Settings.</span></div>
+    <button class="btn bgr" onclick="go('s-success')">This looks right. Let's go →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-success">
+  <div class="body" style="align-items:center;text-align:center;padding-top:16px">
+    <div class="sring" id="sring">🦋</div>
+    <h1 style="text-align:center">You're in,<br><em>welcome.</em></h1>
+    <p class="sub" style="text-align:center;max-width:290px;margin:8px auto 22px">Finding your first 5 matches right now — based entirely on your words, not your looks.</p>
+    <div class="sstats">
+      <div class="sst"><span class="sn">5</span><div class="sl">Daily Matches</div></div>
+      <div class="sst"><span class="sn">6</span><div class="sl">Levels Ahead</div></div>
+      <div class="sst"><span class="sn">∞</span><div class="sl">Conversations</div></div>
+    </div>
+    <div class="ibox ibg" style="text-align:left;max-width:100%"><span>✦</span><span>Your first daily prompt drops at midnight. Both of you answer before either sees the other's response.</span></div>
+    <button class="btn bv" style="margin-top:auto;width:100%" onclick="go('s-chat')">Enter Unveil →</button>
+  </div>
+</div>
+
+<div class="scr" id="s-login">
+  <div class="topbar"><button class="bk" onclick="go('s-splash')">← Back</button></div>
+  <div class="body pt">
+    <span class="ico">👋</span>
+    <h1>Welcome<br><em>back.</em></h1>
+    <p class="sub">Your connections are waiting for you.</p>
+    <div class="fld"><label class="flbl">Email</label><input class="inp" type="email" placeholder="your@email.com"></div>
+    <div class="fld"><label class="flbl">Password</label><input class="inp" type="password" placeholder="Your password"></div>
+    <button class="btn bv" style="margin-top:22px" onclick="go('s-chat')">Sign In →</button>
+    <button class="btn bgh" onclick="go('s-signup')">Create an account</button>
+  </div>
+</div>
+
+<div class="scr" id="s-chat" style="padding:0">
+  <div class="chdr">
+    <button class="cbk" onclick="go('s-success')">←</button>
+    <div class="cav" id="cav">🌙</div>
+    <div class="ci"><div class="cn">Nova_88</div><div class="cs">Active now</div></div>
+    <div class="lbdg lb2">⚡ Level 2</div>
+  </div>
+  <div class="lbar">
+    <div class="lt"><span class="ll">🔥 3-day streak · <span id="mct">74</span> messages</span><span class="ln" id="lnxt">26 more → Level 3</span></div>
+    <div class="ltr"><div class="lf" id="lf" style="width:74%"></div></div>
+    <div class="lsteps">
+      <div class="lstep done"><div class="ldot"></div>L1</div>
+      <div class="lstep cur"><div class="ldot"></div>L2</div>
+      <div class="lstep"><div class="ldot"></div>L3</div>
+      <div class="lstep"><div class="ldot"></div>L4</div>
+      <div class="lstep"><div class="ldot"></div>L5</div>
+      <div class="lstep"><div class="ldot"></div>L6</div>
+    </div>
+  </div>
+  <div class="frow">
+    <div class="fpill fon">✅ Text</div>
+    <div class="fpill fpt">🎤 Voice</div>
+    <div class="fpill foff" onclick="sm('photos')">🖼️ Photo (L3)</div>
+    <div class="fpill foff" onclick="sm('voice')">📞 Call (L4)</div>
+    <div class="fpill foff" onclick="sm('video')">🎥 Video (L5)</div>
+    <div class="fpill foff" onclick="sm('contact')">📱 Contact (L6)</div>
+  </div>
+  <div class="dpb" onclick="toast('✨ You both said midnight! Perfect match on this prompt.')">
+    <div class="dpl">✦ Today's Prompt — tap to reveal your match</div>
+    <div class="dpq">"What time of day do you feel most like yourself?"</div>
+  </div>
+  <div class="msgs" id="msgs">
+    <div class="smsg">🔐 You matched with Nova_88 — no photos, no profiles. Just connection.</div>
+    <div class="mg"><div class="msg them">okay real question — if you could only listen to one album for the rest of your life what would it be? no wrong answers but also there are wrong answers 😭</div><div class="mt">Yesterday 9:42 PM</div></div>
+    <div class="mg"><div class="msg me">lmaoo the pressure 😂 okay I'd say Blonde by Frank Ocean. something about it feels like every emotion at once. you?</div><div class="mt r">Yesterday 9:47 PM</div></div>
+    <div class="mg"><div class="msg them">OKAY valid. mine would be Ctrl by SZA or To Pimp a Butterfly. I cannot choose both feel essential to being alive</div><div class="mt">Yesterday 9:51 PM</div></div>
+    <div class="mg"><div class="msg them">I can send you a voice message now?? this feels like a big deal actually lol</div><div class="mt">Today 2:33 PM</div></div>
+    <div class="mg"><div class="msg me">right?? like there's something different about hearing someone's actual voice. no more hiding behind typing speed</div><div class="mt r">Today 2:41 PM</div></div>
+  </div>
+  <div class="ciw">
+    <div class="exb">
+      <button class="eb" onclick="toast('✨ Daily prompt shared!')">✦ Prompt</button>
+      <button class="eb">🎤 Voice</button>
+      <button class="eb">😄 React</button>
+      <button class="eb lk" onclick="sm('photos')">🖼️ Photo (L3)</button>
+    </div>
+    <div class="ir2">
+      <textarea class="cta" id="cta" placeholder="Say something real..." rows="1" onkeydown="hk(event)"></textarea>
+      <button class="snd" onclick="send()">➤</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="mov" id="mov" onclick="cm(event)">
+  <div class="modal">
+    <div class="mh"></div>
+    <div class="mic" id="mic">🔐</div>
+    <h3 id="mtit">Feature Locked</h3>
+    <p id="mdsc">Keep the conversation going to unlock this feature.</p>
+    <button class="btn bv" onclick="cm()">Got it, keep connecting ✦</button>
+    <button class="btn bgh" onclick="cm()">Close</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const ST={alias:'',avatar:null,tags:[],mc:74};
+const MD={photos:{i:'🖼️',t:'Photos unlock at Level 3',d:'You\'re at Level 2. Keep the conversations going for a few more days. The mystery is part of the magic.'},voice:{i:'📞',t:'Voice Calls unlock at Level 4',d:'Voice calls unlock after 14 days of genuine bonding. Trust is built in conversations, not quick calls.'},video:{i:'🎥',t:'Video Calls unlock at Level 5',d:'After 30 days of real connection, you both choose to truly see each other. This moment is earned.'},contact:{i:'📱',t:'Contact Exchange at Level 6',d:'Level 6 — Trusted. After 45 days and mutual consent, you can take your connection beyond the app.'}};
+const AVS=['🌙','🔥','🌊','🦋','☀️','🌿','⚡','🎭','🌸','🎯','🦅','🌺','💫','🎪','🌹','🐺','🎨','🌻','🔮','🎵'];
+const TGS=['🌙 night owl','🔥 passionate','🎧 music obsessed','💪 gym rat','🧠 deep thinker','🌍 travel bug','📚 bookworm','🍳 chaotic cook','🎮 gamer','🌱 spiritual','🎨 creative','😂 actually funny','☕ coffee dependent','🐕 dog person','🌊 beach energy','🎬 film buff','✍️ writer at heart','🦋 overthinker','🎯 goal-oriented','🌺 romanticist'];
+const REP=['okay that\'s actually a really interesting take 👀','I feel like we think alike a lot — is that just me?','honestly this conversation is different from what I expected lol','wait tell me more about that','I\'ve never thought about it that way before 🤯','okay now I\'m curious, keep going','that\'s such a vibe honestly 💯','lol okay we are literally the same person','this is lowkey my favorite conversation rn'];
+let cur='s-splash';
+
+function go(id){
+  if(id===cur)return;
+  const f=document.getElementById(cur),t=document.getElementById(id);
+  if(!f||!t)return;
+  f.classList.add('out');
+  setTimeout(()=>{f.classList.remove('on','out')},260);
+  t.classList.add('on');
+  cur=id;
+  if(id==='s-preview')syncPrev();
+  if(id==='s-success')syncSuc();
+  if(id==='s-chat')setTimeout(()=>{const m=document.getElementById('msgs');if(m)m.scrollTop=m.scrollHeight},100);
+}
+
+function doSignup(){
+  const e=document.getElementById('ie')?.value;
+  const p=document.getElementById('ip')?.value;
+  if(!e||!p){toast('Please fill in your email and password');return;}
+  if(!e.includes('@')){toast('Enter a valid email address');return;}
+  if(p.length<6){toast('Password needs at least 6 characters');return;}
+  go('s-alias');
+}
+
+function liveAlias(v){
+  ST.alias=v;
+  const n=document.getElementById('pvnm');
+  if(n)n.textContent=v||'Your_alias';
+}
+
+// Build avatars
+(function(){
+  const g=document.getElementById('avgrid');
+  AVS.forEach(e=>{
+    const d=document.createElement('div');
+    d.className='avopt';d.textContent=e;
+    d.onclick=()=>{
+      document.querySelectorAll('.avopt').forEach(x=>x.classList.remove('sel'));
+      d.classList.add('sel');ST.avatar=e;
+      document.getElementById('avhint').textContent='You chose '+e+' — nice.';
+      document.getElementById('avbtn').disabled=false;
+    };
+    g.appendChild(d);
+  });
+})();
+
+// Build tags
+(function(){
+  const g=document.getElementById('tgrid');
+  TGS.forEach(t=>{
+    const d=document.createElement('div');
+    d.className='tag';d.textContent=t;
+    d.onclick=()=>{
+      if(d.classList.contains('sel')){d.classList.remove('sel');ST.tags=ST.tags.filter(x=>x!==t);}
+      else{if(ST.tags.length>=8){toast('Max 8 tags!');return;}d.classList.add('sel');ST.tags.push(t);}
+      document.getElementById('tnum').textContent=ST.tags.length;
+      document.getElementById('tbtn').disabled=ST.tags.length<1;
+    };
+    g.appendChild(d);
+  });
+})();
+
+function tog(el){
+  el.classList.toggle('sel');
+  document.getElementById('lbtn').disabled=document.querySelectorAll('#lopts .ocard.sel').length<1;
+}
+
+function cc(ta,id){document.getElementById(id).textContent=ta.value.length;}
+
+function syncPrev(){
+  const pa=document.getElementById('pvav');
+  const pn=document.getElementById('pvnm');
+  const pt=document.getElementById('pvtgs');
+  if(pa&&ST.avatar)pa.textContent=ST.avatar;
+  if(pn)pn.textContent=ST.alias||'Your_alias';
+  if(pt&&ST.tags.length)pt.innerHTML=ST.tags.slice(0,5).map(t=>'<span class="pvtg">'+t+'</span>').join('');
+}
+
+function syncSuc(){
+  const r=document.getElementById('sring');
+  if(r&&ST.avatar)r.textContent=ST.avatar;
+  const ca=document.getElementById('cav');
+  if(ca&&ST.avatar)ca.textContent=ST.avatar;
+}
+
+function send(){
+  const ta=document.getElementById('cta');
+  const txt=ta.value.trim();
+  if(!txt)return;
+  const msgs=document.getElementById('msgs');
+  const g=document.createElement('div');g.className='mg';
+  const n=new Date();
+  const ts=n.getHours()+':'+String(n.getMinutes()).padStart(2,'0');
+  g.innerHTML='<div class="msg me">'+esc(txt)+'</div><div class="mt r">'+ts+'</div>';
+  msgs.appendChild(g);ta.value='';ta.style.height='auto';
+  msgs.scrollTop=msgs.scrollHeight;
+  ST.mc++;
+  document.getElementById('mct').textContent=ST.mc;
+  document.getElementById('lf').style.width=Math.min(100,ST.mc)+'%';
+  const rem=100-ST.mc;
+  if(rem>0)document.getElementById('lnxt').textContent=rem+' more → Level 3';
+  else if(ST.mc>=100&&ST.mc<103){
+    document.getElementById('lnxt').textContent='🎉 Level 3 Unlocked!';
+    setTimeout(()=>{const b=document.createElement('div');b.className='umsg';b.innerHTML='<h4>✨ Level 3 — Connected!</h4><p>You can now share one photo. Mutual opt-in required.</p>';msgs.appendChild(b);msgs.scrollTop=msgs.scrollHeight;},600);
+  }
+  setTimeout(()=>{
+    const rg=document.createElement('div');rg.className='mg';
+    rg.innerHTML='<div class="msg them">'+REP[Math.floor(Math.random()*REP.length)]+'</div><div class="mt">'+ts+'</div>';
+    msgs.appendChild(rg);msgs.scrollTop=msgs.scrollHeight;
+  },1100+Math.random()*900);
+}
+
+function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function sm(type){
+  const m=MD[type];
+  document.getElementById('mic').textContent=m.i;
+  document.getElementById('mtit').textContent=m.t;
+  document.getElementById('mdsc').textContent=m.d;
+  document.getElementById('mov').classList.add('open');
+}
+function cm(e){
+  if(!e||e.target===document.getElementById('mov')||e.target.tagName==='BUTTON')
+    document.getElementById('mov').classList.remove('open');
+}
+
+let tt;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+document.addEventListener('input',e=>{
+  if(e.target.id==='cta'){e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px';}
+});
+</script>
+
+</body>
+</html>
